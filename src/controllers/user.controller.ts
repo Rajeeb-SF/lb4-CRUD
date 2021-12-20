@@ -69,6 +69,7 @@ export class UserController {
     },
   })
   async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
+    // throw new Error('not implemented');
     return this.userRepository.find(filter);
   }
 
