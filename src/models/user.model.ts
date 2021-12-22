@@ -1,6 +1,8 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasOne, model, property, belongsTo} from '@loopback/repository';
+import {Customer} from '.';
+import {Role} from './role.model';
 
-@model({settings: {strict: false}})
+@model({settings: {strict: true}})
 export class User extends Entity {
   @property({
     type: 'number',
@@ -33,12 +35,6 @@ export class User extends Entity {
 
   @property({
     type: 'string',
-    required: true,
-  })
-  role: string;
-
-  @property({
-    type: 'string',
   })
   phoneNumber?: string;
 
@@ -58,7 +54,11 @@ export class User extends Entity {
     default: new Date(),
   })
   updatedAt?: string;
+  @hasOne(() => Customer, {keyTo: 'userId'})
+  customer?: Customer;
 
+  @belongsTo(() => Role)
+  roleId: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data
