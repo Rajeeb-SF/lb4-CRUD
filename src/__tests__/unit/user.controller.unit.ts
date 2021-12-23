@@ -1,9 +1,9 @@
 // in your test file
 import {Client, expect} from '@loopback/testlab';
-import {UserManageApplication} from '../../../';
-import {setupApplication} from '../../acceptance/test-helper';
+import {UserManageApplication} from '../../';
+import {setupApplication} from '../acceptance/test-helper';
 
-describe('UserController (integration)', () => {
+describe('UserController (unit)', () => {
   let app: UserManageApplication;
   let client: Client;
   before('setupApplication', async () => {
