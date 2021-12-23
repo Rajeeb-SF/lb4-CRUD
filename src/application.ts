@@ -1,5 +1,6 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
+import {LoggingBindings, LoggingComponent} from '@loopback/logging';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {
@@ -30,7 +31,19 @@ export class UserManageApplication extends BootMixin(
     this.configure(RestExplorerBindings.COMPONENT).to({
       path: '/explorer',
     });
+    this.configure(LoggingBindings.COMPONENT).to({
+      enableFluent: false, // default to true
+      enableHttpAccessLog: true, // default to true
+    });
+    this.configure(LoggingBindings.FLUENT_SENDER).to({
+      host: process.env.FLUENTD_SERVICE_HOST ?? 'localhost',
+      port: +(process.env.FLUENTD_SERVICE_PORT_TCP ?? 24224),
+      timeout: 3.0,
+      reconnectInterval: 600000, // 10 minutes
+    });
+
     this.component(RestExplorerComponent);
+    this.component(LoggingComponent);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

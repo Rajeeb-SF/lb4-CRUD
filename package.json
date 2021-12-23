@@ -51,20 +51,26 @@
   "dependencies": {
     "@loopback/boot": "^4.0.0",
     "@loopback/core": "^3.0.0",
+    "@loopback/logging": "^0.7.0",
     "@loopback/repository": "^4.0.0",
     "@loopback/rest": "^11.0.0",
     "@loopback/rest-explorer": "^4.0.0",
     "@loopback/service-proxy": "^4.0.0",
+    "app-root-path": "^3.0.0",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "loopback-connector-postgresql": "^5.4.0",
     "moment": "^2.29.1",
-    "tslib": "^2.0.0"
+    "morgan": "^1.10.0",
+    "tslib": "^2.0.0",
+    "winston-daily-rotate-file": "^4.5.5"
   },
   "devDependencies": {
     "@loopback/build": "^8.0.0",
     "@loopback/eslint-config": "^12.0.0",
     "@loopback/testlab": "^4.0.0",
+    "@types/app-root-path": "^1.2.4",
+    "@types/morgan": "^1.9.3",
     "@types/node": "^10.17.60",
     "eslint": "^7.32.0",
     "mocha": "^9.1.3",

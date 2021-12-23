@@ -1,3 +1,5 @@
+import {inject} from '@loopback/core';
+import {LoggingBindings, logInvocation, WinstonLogger} from '@loopback/logging';
 import {MiddlewareSequence, RequestContext} from '@loopback/rest';
 import moment from 'moment';
 
@@ -5,6 +7,9 @@ export class MySequence extends MiddlewareSequence {
   log(message: string): void {
     console.log(message);
   }
+  @inject(LoggingBindings.WINSTON_LOGGER)
+  private logger: WinstonLogger;
+  @logInvocation()
   parseHeader(headers: Array<string>, headerKey: string): string | undefined {
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i];
@@ -19,9 +24,10 @@ export class MySequence extends MiddlewareSequence {
         context.request.rawHeaders,
         'User-Agent',
       );
+
+      this.logger.log('error', 'hello world!');
       const Referer = this.parseHeader(context.request.rawHeaders, 'Host');
       const allowedOrigins = process.env.ALLOWED_ORIGIN?.split(' ');
-
       this.log(`Request Start Time: ${moment().format()}`);
       this.log(`User Agent: ${userAgent}`);
       this.log(`Referer: ${Referer}`);
@@ -33,7 +39,6 @@ export class MySequence extends MiddlewareSequence {
         throw new Error(`Invalid origin`);
       }
       await super.handle(context);
-
       this.log(`Request End Time: ${moment().format()}`);
     } catch (error) {
       this.log(`Error Time: ${moment().format()}`);

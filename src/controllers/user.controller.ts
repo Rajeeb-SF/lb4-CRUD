@@ -1,3 +1,5 @@
+import {inject} from '@loopback/core';
+import {LoggingBindings, WinstonLogger} from '@loopback/logging';
 import {
   Count,
   CountSchema,
@@ -25,7 +27,8 @@ export class UserController {
     @repository(UserRepository)
     public userRepository: UserRepository,
   ) {}
-
+  @inject(LoggingBindings.WINSTON_LOGGER)
+  private logger: WinstonLogger;
   @post('/users')
   @response(200, {
     description: 'User model instance',
@@ -53,6 +56,7 @@ export class UserController {
     content: {'application/json': {schema: CountSchema}},
   })
   async count(@param.where(User) where?: Where<User>): Promise<Count> {
+    this.logger.log('info', 'GET /users/count');
     return this.userRepository.count(where);
   }
 
@@ -69,7 +73,7 @@ export class UserController {
     },
   })
   async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
-    // throw new Error('not implemented');
+    // this.logger.log('info', 'GET /users');
     return this.userRepository.find(filter);
   }
 
