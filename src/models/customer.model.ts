@@ -1,6 +1,5 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {User} from '.';
-enum roles {}
 @model({settings: {strict: true}})
 export class Customer extends Entity {
   @property({

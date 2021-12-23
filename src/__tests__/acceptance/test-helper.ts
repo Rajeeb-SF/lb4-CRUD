@@ -1,10 +1,10 @@
-import {UserManageApplication} from '../..';
 import {
+  Client,
   createRestAppClient,
   givenHttpServerConfig,
-  Client,
 } from '@loopback/testlab';
-
+import * as dotenv from 'dotenv';
+import {UserManageApplication} from '../..';
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({
     // Customize the server configuration here.
@@ -17,7 +17,7 @@ export async function setupApplication(): Promise<AppWithClient> {
   const app = new UserManageApplication({
     rest: restConfig,
   });
-
+  dotenv.config();
   await app.boot();
   await app.start();
 

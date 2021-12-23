@@ -15,23 +15,25 @@ export class MySequence extends MiddlewareSequence {
   }
   async handle(context: RequestContext) {
     try {
+      const userAgent = this.parseHeader(
+        context.request.rawHeaders,
+        'User-Agent',
+      );
+      const Referer = this.parseHeader(context.request.rawHeaders, 'Host');
+      const allowedOrigins = process.env.ALLOWED_ORIGIN?.split(' ');
+
       this.log(`Request Start Time: ${moment().format()}`);
-      this.log(
-        `User Agent: ${this.parseHeader(
-          context.request.rawHeaders,
-          'User-Agent',
-        )}`,
-      );
-      this.log(
-        `Referer: ${this.parseHeader(context.request.rawHeaders, 'Host')}`,
-      );
+      this.log(`User Agent: ${userAgent}`);
+      this.log(`Referer: ${Referer}`);
       this.log(`Request Ip: ${context.request.connection.remoteAddress}`);
-      let allowedOrigins: any = process.env.ALLOWED_ORIGIN?.split(' ');
-      let referer: any = this.parseHeader(context.request.rawHeaders, 'Host');
-      if (!allowedOrigins.some((origin: string) => origin === referer)) {
+      if (
+        !allowedOrigins?.some((origin: string) => origin === Referer) &&
+        userAgent
+      ) {
         throw new Error(`Invalid origin`);
       }
       await super.handle(context);
+
       this.log(`Request End Time: ${moment().format()}`);
     } catch (error) {
       this.log(`Error Time: ${moment().format()}`);
